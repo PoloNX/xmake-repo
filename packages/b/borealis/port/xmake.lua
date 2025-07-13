@@ -86,7 +86,7 @@ target("borealis")
     local window = get_config("window")
     local driver = get_config("driver")
 
-    elseif is_plat("windows") or is_plat("linux") or is_plat("macosx") then
+    if is_plat("windows") or is_plat("linux") or is_plat("macosx") then
         if window == "glfw" then
             add_files("library/lib/platforms/glfw/*.cpp")
             add_files("library/lib/platforms/desktop/*.cpp")
