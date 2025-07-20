@@ -33,6 +33,7 @@ package("borealis")
     )
     add_includedirs("include")
     if is_plat("windows") then
+        add_cxflags("/utf-8")
         add_includedirs("include/compat")
         add_syslinks("wlanapi", "iphlpapi", "ws2_32")
     elseif is_plat("linux") then
