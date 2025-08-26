@@ -26,6 +26,8 @@ package("borealis")
     add_configs("window", {description = "use window lib", default = "glfw", type = "string"})
     add_configs("driver", {description = "use driver lib", default = "opengl", type = "string"})
     add_configs("winrt", {description = "use winrt api", default = false, type = "boolean"})
+    add_configs("resources_dir", {description = "resources directory", default = ".", type = "string"})
+
     add_deps(
         "nanovg",
         "yoga =2.0.1",
@@ -47,6 +49,7 @@ package("borealis")
         local window = package:config("window")
         local driver = package:config("driver")
         local winrt = package:config("winrt")
+
         if window == "glfw" then
             package:add("deps", "xfangfang_glfw")
         elseif window == "sdl" then
@@ -67,6 +70,7 @@ package("borealis")
         configs["window"] = package:config("window")
         configs["driver"] = package:config("driver")
         configs["winrt"] = package:config("winrt") and "y" or "n"
+        configs["resources_dir"] = package:config("resources_dir")
         import("package.tools.xmake").install(package, configs)
         os.cp("library/include/*", package:installdir("include").."/")
         os.rm(package:installdir("include/borealis/extern"))

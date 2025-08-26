@@ -5,6 +5,11 @@ option("platfrom")
     set_showmenu(true)
 option_end()
 
+option("resources_dir")
+    set_default(".")
+    set_showmenu(true)
+option_end()
+
 option("window")
     set_default("glfw")
     set_showmenu(true)
@@ -26,7 +31,12 @@ option("unity_build")
 option_end()
 
 
-local platform_resources_path = "\"./resources/\""
+local resources_dir = get_config("resources_dir")
+if resources_dir and resources_dir ~= "" and resources_dir ~= "." then
+    platform_resources_path = "\"" .. resources_dir .. "/resources/\""
+else
+    platform_resources_path = "\"./resources/\""
+end
 
 if is_plat("windows") then
     set_languages("c++20")
