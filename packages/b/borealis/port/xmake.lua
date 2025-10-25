@@ -58,7 +58,10 @@ end
 add_requires("tinyxml2")
 add_requires("yoga =2.0.1")
 add_requires("stb")
-add_requires("nanovg")
+
+add_repositories("polonx https://github.com/PoloNX/xmake-repo")
+
+add_requires("polonx@nanovg", {alias = "nanovg"})
 add_requires("nlohmann_json")
 add_requires("fmt")
 add_requires("tweeny")
