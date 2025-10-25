@@ -8,7 +8,7 @@ end
 
 set_encodings("utf-8")
 set_languages("c++17")
-add_requires("plutovg")
+add_requires("plutovg 1.0.0")
 
 target("lunasvg")
     set_kind("$(kind)")
