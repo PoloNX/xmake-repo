@@ -67,7 +67,7 @@ package("sokol-shdc")
     end
     on_install(function (package)
         local bin = package:installdir("bin")
-        os.run("ls ../")
+        os.iorun("ls ../")
         if is_host("windows") then
             os.cp("../sokol-shdc.exe", bin)
         else
