@@ -9,7 +9,7 @@ add_repositories("zeromake https://github.com/zeromake/xrepo.git")
 add_repositories("polonx https://github.com/PoloNX/xmake-repo.git")
 
 add_requires("stb")
-add_requires("polonx@sokol-sdhc", {alias = "sokol-sdhc"})
+add_requires("polonx@sokol-shdc", {alias = "sokol-shdc"})
 add_defines("NVG_USE_SHD_SHADER")
 
 if get_config("freetype") then
