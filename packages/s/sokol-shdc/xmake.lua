@@ -65,13 +65,38 @@ package("sokol-shdc")
         end
         add_versions(ver, hash)
     end
+
     on_install(function (package)
         local bin = package:installdir("bin")
-        os.iorun("ls ../")
-        if is_host("windows") then
-            os.cp("../sokol-shdc.exe", bin)
+
+        -- debug: afficher le cachedir et son contenu
+        local cachedir = package:cachedir()
+        print("cachedir: " .. tostring(cachedir))
+        local ok, lsout = pcall(function() return os.iorun("ls -la " .. cachedir) end)
+        if ok then
+            print(lsout)
         else
-           -- os.run("chmod 755 ../sokol-shdc")
-            os.cp("../sokol-shdc", bin)
+            print("ls failed: " .. tostring(lsout))
+        end
+
+        -- chercher le binaire dans le cachedir (récursif)
+        local files = os.files(cachedir .. "/**/sokol-shdc*")
+        if not files or #files == 0 then
+            -- fallback: essayer aussi le parent (ancienne hypothèse)
+            files = os.files("../**/sokol-shdc*")
+        end
+
+        if not files or #files == 0 then
+            raise("sokol-shdc: binaire introuvable dans cachedir")
+        end
+
+        local src = files[1]
+        print("found sokol-shdc at: " .. src)
+
+        if is_host("windows") then
+            os.cp(src, bin .. "/sokol-shdc.exe")
+        else
+            os.cp(src, bin .. "/sokol-shdc")
+            os.run("chmod 755 " .. bin .. "/sokol-shdc")
         end
     end)
