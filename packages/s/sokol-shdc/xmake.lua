@@ -71,7 +71,7 @@ package("sokol-shdc")
         if is_host("windows") then
             os.cp("../sokol-shdc.exe", bin)
         else
-            os.run("chmod 755 ../sokol-shdc")
+           -- os.run("chmod 755 ../sokol-shdc")
             os.cp("../sokol-shdc", bin)
         end
     end)
