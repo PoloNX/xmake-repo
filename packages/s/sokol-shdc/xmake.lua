@@ -65,38 +65,41 @@ package("sokol-shdc")
         end
         add_versions(ver, hash)
     end
-
+    
     on_install(function (package)
         local bin = package:installdir("bin")
-
-        -- debug: afficher le cachedir et son contenu
         local cachedir = package:cachedir()
         print("cachedir: " .. tostring(cachedir))
-        local ok, lsout = pcall(function() return os.iorun("ls -la " .. cachedir) end)
-        if ok then
-            print(lsout)
+
+        -- lister le cache (récursif) pour debug via les logs xmake
+        local all = os.files(cachedir .. "/**/*")
+        for _, f in ipairs(all) do
+            print("cached: " .. f)
+        end
+
+        -- chercher le binaire selon la plateforme
+        local pattern = nil
+        if is_host("windows") then
+            pattern = "**/sokol-shdc.exe"
         else
-            print("ls failed: " .. tostring(lsout))
+            pattern = "**/sokol-shdc"
         end
 
-        -- chercher le binaire dans le cachedir (récursif)
-        local files = os.files(cachedir .. "/**/sokol-shdc*")
+        local files = os.files(cachedir .. "/" .. pattern)
         if not files or #files == 0 then
-            -- fallback: essayer aussi le parent (ancienne hypothèse)
-            files = os.files("../**/sokol-shdc*")
+            -- fallback : essayer racine
+            files = os.files(cachedir .. "/sokol-shdc*")
         end
 
         if not files or #files == 0 then
-            raise("sokol-shdc: binaire introuvable dans cachedir")
+            raise("sokol-shdc: binaire introuvable dans cachedir: " .. tostring(cachedir))
         end
 
         local src = files[1]
-        print("found sokol-shdc at: " .. src)
+        local destname = is_host("windows") and "sokol-shdc.exe" or "sokol-shdc"
+        os.cp(src, path.join(bin, destname))
 
-        if is_host("windows") then
-            os.cp(src, bin .. "/sokol-shdc.exe")
-        else
-            os.cp(src, bin .. "/sokol-shdc")
-            os.run("chmod 755 " .. bin .. "/sokol-shdc")
+        if not is_host("windows") then
+            os.run("chmod 755 " .. path.join(bin, destname))
         end
     end)
